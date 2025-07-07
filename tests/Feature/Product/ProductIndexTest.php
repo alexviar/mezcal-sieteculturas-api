@@ -1,0 +1,24 @@
+<?php
+
+use App\Models\User;
+use Tests\TestCase;
+
+describe('product index', function(){
+    $endpoint = '/api/products';
+    
+    test('An authenticated user is able to access the products index.', function () use($endpoint) {
+        /** @var User $login */
+        $login = User::factory()->create();
+        $response = $this->actingAs($login)->getJson($endpoint);
+    
+        expect($response->getStatusCode())->not->toBe(401);
+    });
+
+    test('An unauthenticated user is denied access to the products index.', function () use($endpoint) {
+        /** @var TestCase $this */
+        $response = $this->getJson($endpoint);
+    
+        $response->assertUnauthorized();
+    });
+});
+
