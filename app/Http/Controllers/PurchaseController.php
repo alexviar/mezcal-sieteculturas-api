@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Cache;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PurchaseController
 {
@@ -56,7 +57,12 @@ class PurchaseController
 
         $pdf = Pdf::loadView('orders.purchase', $data);
         $pdf->setPaper('letter', 'landscape');
-        return $pdf->download('purchase_order.pdf');
+        $path = 'purchases/pedido_' . str_pad($purchase->id, 6, '0', STR_PAD_LEFT) . '_' . str_replace('.', '', microtime(true)) . '.pdf';
+        $pdf->save($path, 'local');
+
+        return response([
+            'download_url' => Storage::temporaryUrl($path, now()->addMinutes(30))
+        ]);
     }
 
 
