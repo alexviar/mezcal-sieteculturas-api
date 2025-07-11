@@ -20,7 +20,7 @@
         }
 
         .header {
-            background: #5f3713;
+            background: #005d4e;
             width: 100%;
             padding: 20px;
             color: white;
@@ -53,12 +53,12 @@
         }
 
         strong {
-            color: #5f3713;
+            color: #005d4e;
         }
 
         .user-name {
             font-size: 13px;
-            color: #5f3713;
+            color: #005d4e;
             font-weight: bold;
         }
     </style>

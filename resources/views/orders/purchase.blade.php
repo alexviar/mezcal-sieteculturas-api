@@ -15,7 +15,7 @@
         .header {
             position: relative;
             margin-bottom: 15px;
-            border-bottom: 3px solid #5f3713;
+            border-bottom: 3px solid #005d4e;
             overflow: hidden;
             padding: 10px 0;
         }
@@ -34,7 +34,7 @@
         }
 
         .document-title {
-            color: #5f3713;
+            color: #005d4e;
             font-size: 20px;
             margin: 0;
             line-height: 1.2;
@@ -59,7 +59,7 @@
         }
 
         .info-label {
-            color: #5f3713;
+            color: #005d4e;
             font-weight: bold;
             width: 80px;
         }
@@ -71,7 +71,7 @@
         }
 
         th {
-            background-color: #5f3713;
+            background-color: #005d4e;
             color: white;
             padding: 8px;
             text-align: left;
@@ -89,13 +89,13 @@
 
         .total-amount {
             font-size: 14px;
-            color: #5f3713;
+            color: #005d4e;
             font-weight: bold;
         }
 
         .payment-box {
             page-break-inside: avoid;
-            border: 1px solid #5f3713;
+            border: 1px solid #005d4e;
             margin-top: 30px;
             width: 100%;
         }
