@@ -24,7 +24,10 @@ class Product extends Model
 
     protected $casts  = [
         'images' => 'array',
-        'price' => 'integer'
+        'price' => 'float',
+        'shipping_value' => 'float',
+        'stock' => 'integer',
+        'status' => 'boolean'
     ];
 
     /**
