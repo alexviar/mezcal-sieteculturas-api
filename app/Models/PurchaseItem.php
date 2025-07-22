@@ -19,6 +19,14 @@ class PurchaseItem extends Model
         'quantity'
     ];
 
+    public function casts(): array
+    {
+        return [
+            'unit_price' => 'float',
+            'quantity' => 'integer'
+        ];
+    }
+
     public function subtotal(): Attribute
     {
         return Attribute::get(fn() => $this->unit_price * $this->quantity);
