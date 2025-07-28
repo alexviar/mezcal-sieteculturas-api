@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
-class CleanExpiredReports extends Command
+class CleanPurchaseReceipts extends Command
 {
     /**
      * The name and signature of the console command.
