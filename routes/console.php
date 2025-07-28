@@ -13,4 +13,9 @@ use Illuminate\Support\Facades\Schedule;
 |
 */
 
+Schedule::command('queue:work --tries=1 --stop-when-empty')
+  ->withoutOverlapping()
+  ->everyThirtySeconds()
+  ->appendOutputTo(storage_path('logs/queue.log'));
+
 Schedule::command("purchases:clean-receipts")->everyFifteenMinutes();
