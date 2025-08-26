@@ -2,12 +2,14 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\StripeWebhookController;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,4 +55,24 @@ Route::controller(PurchaseController::class)->prefix('purchases')->group(functio
 
 Route::controller(StripeWebhookController::class)->prefix('stripe')->group(function () {
     Route::post('/webhook', 'handleWebhook');
+});
+
+Route::post('/log-error', function (Request $request) {
+    // Obtener los datos del error
+    $message = $request->input('message');
+    $stack = $request->input('stack');
+    $componentStack = $request->input('componentStack');
+    $timestamp = $request->input('timestamp');
+
+    // Guardar el error en el log
+    Log::channel('frontend')->error('Frontend Error:', [
+        'message' => $message,
+        'stack' => $stack,
+        'componentStack' => $componentStack,
+        'timestamp' => $timestamp,
+        'ip_address' => $request->ip(),
+        'user_agent' => $request->header('User-Agent'),
+    ]);
+
+    return response()->json(['status' => 'success', 'message' => 'Error logged successfully']);
 });
