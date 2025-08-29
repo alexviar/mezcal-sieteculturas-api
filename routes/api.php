@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\StripeWebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +20,7 @@ use App\Http\Controllers\StoreController;
 |
 */
 
-Route::controller(AuthController::class)->prefix('auth')->group(function(){
+Route::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::post('/login', 'login');
     Route::middleware('auth:sanctum')->post('/logout', 'logout');
 });
@@ -27,22 +28,22 @@ Route::controller(AuthController::class)->prefix('auth')->group(function(){
 Route::get('users', [UserController::class, 'index']);
 Route::post('users', [UserController::class, 'store']);
 
-Route::controller(ProductController::class)->prefix('products')->group(function(){
+Route::controller(ProductController::class)->prefix('products')->group(function () {
     Route::middleware('auth:sanctum')->get('/', 'index');
     Route::middleware('auth:sanctum')->post('/', 'store');
     Route::middleware('auth:sanctum')->put('/{id}', 'update');
     Route::middleware('auth:sanctum')->get('/{id}', 'show');
 });
 
-Route::controller(DashboardController::class)->prefix('dashboard')->group(function(){
+Route::controller(DashboardController::class)->prefix('dashboard')->group(function () {
     Route::middleware('auth:sanctum')->get('/', 'index');
 });
 
-Route::controller(StoreController::class)->prefix('store')->group(function(){
+Route::controller(StoreController::class)->prefix('store')->group(function () {
     Route::get('/', 'index');
 });
 
-Route::controller(PurchaseController::class)->prefix('purchases')->group(function(){
+Route::controller(PurchaseController::class)->prefix('purchases')->group(function () {
     Route::middleware('auth:sanctum')->get('/', 'index');
     Route::middleware('auth:sanctum')->get('/{id}', 'show');
     Route::post('/', 'store');
