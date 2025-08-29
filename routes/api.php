@@ -49,3 +49,7 @@ Route::controller(PurchaseController::class)->prefix('purchases')->group(functio
     Route::middleware('auth:sanctum')->put('/{id}', 'update');
     Route::middleware('auth:sanctum')->get('/{id}/download', 'downloadPurchaseOrder');
 });
+
+Route::controller(StripeWebhookController::class)->prefix('stripe')->group(function () {
+    Route::post('/webhook', 'handleWebhook');
+});
