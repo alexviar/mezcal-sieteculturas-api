@@ -92,7 +92,7 @@ class PurchaseController
             foreach ($payload['items'] as $item) {
                 logger("items", $item);
                 $product = Product::find($item['product_id']);
-                $quantity = +$item['quantity'];
+                $quantity = (int) $item['quantity'];
                 do {
                     if ($product->stock < $quantity) {
                         abort(response([
