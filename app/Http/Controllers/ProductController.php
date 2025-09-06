@@ -25,21 +25,9 @@ class ProductController
 
     public function show($id)
     {
-        try {
-            $cacheKey = 'product_' . $id;
-            $cacheDuration = 3600;
+        $product = Product::findOrFail($id);
 
-            $product = Cache::remember($cacheKey, $cacheDuration, function () use ($id) {
-                return Product::findOrFail($id);
-            });
-
-            return response()->json(['message' => 'Producto obtenido exitosamente', 'product' => $product], 200);
-        } catch (\Throwable $exc) {
-            return response()->json([
-                'message' => 'Error al recuperar producto',
-                'error' => $exc->getMessage(),
-            ], 500);
-        }
+        return $product;
     }
 
 
@@ -82,14 +70,14 @@ class ProductController
         ]);
 
         $product = Product::findOrFail($id);
-        
+
         if (isset($payload['images'])) {
-            foreach($product->images as $image){
+            foreach ($product->images as $image) {
                 Storage::disk('public')->delete($image);
             }
             $payload['images'] = array_map(fn($image) => Storage::url($image->store('products', 'public')), $payload['images']);
         }
-        
+
         $product->update($payload);
 
         return $product;
