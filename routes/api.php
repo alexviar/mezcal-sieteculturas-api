@@ -34,7 +34,7 @@ Route::controller(ProductController::class)->prefix('products')->group(function 
     Route::middleware('auth:sanctum')->get('/', 'index');
     Route::middleware('auth:sanctum')->post('/', 'store');
     Route::middleware('auth:sanctum')->put('/{id}', 'update');
-    Route::middleware('auth:sanctum')->get('/{id}', 'show');
+    Route::get('/{id}', 'show');
 });
 
 Route::controller(DashboardController::class)->prefix('dashboard')->group(function () {
