@@ -120,6 +120,13 @@ class PurchaseController
                 $shippingFee += $product->shipping_value;
             }
 
+            if ($totalAmount + $shippingFee != $payload['value']) {
+                abort(response([
+                    'message' => 'Los precios han expirado. Por favor verifica tu carrito e intenta nuevamente.',
+                    'code' => 'INVALID_TOTAL_AMOUNT'
+                ], 409));
+            }
+
             $paymentType = $payload['payment_type'];
 
             $purchase = new Purchase();
