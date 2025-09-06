@@ -142,6 +142,7 @@ class PurchaseController
             $purchase->customer_zip     = $payload['customer_zip'];
             $purchase->customer_phone   = $payload['customer_phone'];
             $purchase->promo_code       = $payload['promo_code'] ?? '';
+            $purchase->paid             = $paymentType === 'transferencia';
 
             $purchase->save();
             $purchase->items()->createMany($items);
@@ -150,32 +151,29 @@ class PurchaseController
                 Stripe::setApiKey(config('services.stripe.secret'));
 
                 $paymentIntent = PaymentIntent::create([
+                    'metadata' => [
+                        'purchase_id' => $purchase->id,
+                    ],
                     'amount' => $payload['value'] * 100,
                     'currency' => 'MXN',
                     'confirm' => true,
-                    'return_url' => config('app.url') . '/checkout/thank-you',
+                    'return_url' => config('app.frontend_url') . '/checkout/thank-you',
                     'payment_method' => $payload['payment_method'],
                 ]);
 
-                if ($paymentIntent->status !== 'succeeded') {
-                    abort(response([
-                        'message' => 'El cargo no fue exitoso',
-                        'error' => 'El cargo no se completó correctamente en Stripe.',
-                    ], 500));
+                if ($paymentIntent->status === 'succeeded') {
+                    $purchase->paid = true;
+                    $purchase->save();
                 }
+
+                return ['status' => $paymentIntent->status, 'clientSecret' => $paymentIntent->client_secret, 'purchase' => $purchase];
             }
 
-            PostPurchase::dispatch($purchase)->afterCommit();
-
-            return $purchase;
+            return ['purchase' => $purchase];
         });
 
 
-        return response()->json([
-            'message' => 'Compra creada exitosamente, stock actualizado',
-            'purchase' => $purchase,
-            "is_ok" => true,
-        ], 201);
+        return response()->json($purchase, 201);
     }
 
     public function update(Request $request, $id)

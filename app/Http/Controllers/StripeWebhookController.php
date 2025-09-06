@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\PostPurchase;
+use App\Models\Purchase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Stripe\Event;
@@ -43,7 +45,11 @@ class StripeWebhookController
                 /** @var PaymentIntent $paymentIntent */
                 $paymentIntent = $event->data->object;
 
-                logger("Payment succeeded", $paymentIntent->toArray());
+                $purchase = Purchase::where('id', $paymentIntent->metadata['purchase_id'])->first();
+                if ($purchase) {
+                    $purchase->paid = true;
+                    $purchase->save();
+                }
                 break;
 
             default:
